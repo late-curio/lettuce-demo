@@ -3,42 +3,14 @@
  */
 package lettuce.demo;
 
-import io.lettuce.core.RedisClient;
-import io.lettuce.core.api.StatefulRedisConnection;
-import io.lettuce.core.api.sync.RedisCommands;
-
-import java.util.Map;
-
 public class App {
-    public String getGreeting() {
-        return "Hello World!";
-    }
 
-    public static void main(String[] args) {
-        RedisClient redisClient = RedisClient
-                .create("redis://localhost:6379/");
-        StatefulRedisConnection<String, String> connection
-                = redisClient.connect();
-        System.out.println(connection.isOpen());
-
-        if(connection.isOpen() == false) {
-            System.err.println("Lettuce connect is NOT open");
-            System.exit(-1);
+    public static void main(String[] args) throws InterruptedException {
+        LettuceService service = new LettuceService();
+        for (int i = 0; i < 1000; i++) {
+            service.doEet();
+            Thread.sleep(500);
+            System.out.print(i + " ");
         }
-
-        RedisCommands<String, String> syncCommands = connection.sync();
-
-        syncCommands.set("key", "Goodbye, Redis!");
-
-        String value = syncCommands.get("key");
-
-        System.out.println(value);
-
-        syncCommands.hset("recordName", "FirstName", "John");
-        syncCommands.hset("recordName", "LastName", "Smith");
-
-        Map<String, String> record = syncCommands.hgetall("recordName");
-
-        System.out.println(record);
     }
 }
