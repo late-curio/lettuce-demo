@@ -5,6 +5,7 @@ package lettuce.demo;
 
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
+import io.lettuce.core.api.sync.RedisCommands;
 
 public class App {
     public String getGreeting() {
@@ -17,5 +18,18 @@ public class App {
         StatefulRedisConnection<String, String> connection
                 = redisClient.connect();
         System.out.println(connection.isOpen());
+
+        if(connection.isOpen() == false) {
+            System.err.println("Lettuce connect is NOT open");
+            System.exit(-1);
+        }
+
+        RedisCommands<String, String> syncCommands = connection.sync();
+
+        syncCommands.set("key", "Goodbye, Redis!");
+
+        String value = syncCommands.get("key");
+
+        System.out.println(value);
     }
 }
