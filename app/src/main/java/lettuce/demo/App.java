@@ -7,6 +7,8 @@ import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;
 
+import java.util.Map;
+
 public class App {
     public String getGreeting() {
         return "Hello World!";
@@ -31,5 +33,12 @@ public class App {
         String value = syncCommands.get("key");
 
         System.out.println(value);
+
+        syncCommands.hset("recordName", "FirstName", "John");
+        syncCommands.hset("recordName", "LastName", "Smith");
+
+        Map<String, String> record = syncCommands.hgetall("recordName");
+
+        System.out.println(record);
     }
 }
