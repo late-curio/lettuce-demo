@@ -3,6 +3,10 @@
 
 # Ignore Gradle build output directory
 build
+bin
 
 .idea
 logs
+
+# ignore any newrelic JAR is root
+newrelic.jar
